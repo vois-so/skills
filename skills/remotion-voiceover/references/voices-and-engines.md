@@ -51,7 +51,7 @@ Multilingual (23)  Arabic, Chinese, Danish, Dutch, English, Finnish, French, Ger
                    Swahili, Swedish, Turkish
 ```
 
-An engine refuses a language that it does not speak. It does not send the line to a different engine. Set the language with `"language"` in `scenes.json`. If you do not set it, a short line can stop with exit 64.
+An engine refuses a language that it does not speak. It does not send the line to a different engine. Set the language with `"language"` in `scenes.json`. The script sends English when you do not set a language. With `auto`, the CLI can stop a short line with exit 64.
 
 `vois-cli tts generate` does not use the engine that you selected in the app. The script always sends `--engine`. The default is `expressive`.
 

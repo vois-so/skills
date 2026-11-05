@@ -408,26 +408,29 @@ export function timeWords(sentence) {
   });
 }
 
-// Groups timed words into caption cues.
+// Groups timed words into caption cues. A cue ends at a sentence end. A full cue
+// breaks after its last comma when it can, so a clause stays on one cue.
 export function buildCues(words, opts = {}) {
   const maxChars = opts.maxChars ?? 42;
   const maxLines = opts.maxLines ?? 2;
   const maxWords = opts.maxWords ?? Infinity;
   const minDur = opts.minDuration ?? 0.8;
+  const clause = /[,;:\u2013\u2014]["'\u201d\u2019)\]]*$/;
   const cues = [];
   let cur = [];
-  const flush = () => {
-    if (cur.length) cues.push({ start: cur[0].start, end: cur[cur.length - 1].end, words: cur });
-    cur = [];
-  };
+  const emit = (ws) => { if (ws.length) cues.push({ start: ws[0].start, end: ws[ws.length - 1].end, words: ws }); };
+  const fits = (ws) => ws.length <= maxWords && wrap(ws.map((x) => x.text).join(' '), maxChars).length <= maxLines;
   for (const w of words) {
-    const text = [...cur, w].map((x) => x.text).join(' ');
-    const lines = wrap(text, maxChars);
-    if (cur.length && (lines.length > maxLines || cur.length >= maxWords)) flush();
+    if (cur.length && !fits([...cur, w])) {
+      let k = -1;
+      for (let i = cur.length - 2; i >= 1; i--) if (clause.test(cur[i].text)) { k = i; break; }
+      if (k >= 1 && fits(cur.slice(k + 1).concat(w))) { emit(cur.slice(0, k + 1)); cur = cur.slice(k + 1); } else { emit(cur); cur = []; }
+    }
     cur.push(w);
-    if (/[.!?…]["'”’)\]]*$/.test(w.text)) flush();
+    const len = cur.map((x) => x.text).join(' ').length;
+    if (/[.!?\u2026]["'\u201d\u2019)\]]*$/.test(w.text) || (maxLines > 1 && clause.test(w.text) && len >= maxChars)) { emit(cur); cur = []; }
   }
-  flush();
+  emit(cur);
   for (let i = 0; i < cues.length; i++) {
     const c = cues[i];
     c.text = wrap(c.words.map((x) => x.text).join(' '), maxChars).join('\n');
