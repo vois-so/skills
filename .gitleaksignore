@@ -1,0 +1,2 @@
+# False positive: an example cache key in a manifest sample, not a secret (commit 97156e7).
+skills/hyperframes-voiceover/references/script-and-manifest.md:generic-api-key:114
