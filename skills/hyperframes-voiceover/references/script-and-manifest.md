@@ -111,7 +111,7 @@ A change to `lead`, `tail`, `minSeconds`, `offset` or `fps` changes only the tim
       "speed": 1,
       "instruct": null,
       "seed": null,
-      "key": "5c1f0e9a7b2d4c11"
+      "key": "<16 hex characters>"
     }
   ]
 }
