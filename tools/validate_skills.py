@@ -56,6 +56,10 @@ def main():
             errors.append(f"{skill.name}: bad name '{name}'")
         if name != skill.name:
             errors.append(f"{skill.name}: name '{name}' does not equal the folder name")
+        raw_desc = next((l for l in f.read_text(encoding="utf-8").splitlines() if l.startswith("description:")), "")
+        value = raw_desc[len("description:"):].strip()
+        if value and value[0] not in "\"'|>" and (": " in value or " #" in value or value.endswith(":")):
+            errors.append(f"{skill.name}: put the description in double quotes; it holds ': ' or ' #', which YAML cannot read")
         if not 1 <= len(desc) <= 1024:
             errors.append(f"{skill.name}: description has {len(desc)} characters (1-1024)")
         lines = body.count("\n") + 1
