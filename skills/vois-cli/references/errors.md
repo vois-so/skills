@@ -17,6 +17,8 @@ Read `data.reason` first. It sets the exit code before `code` does.
 | `cancelled` | 130 | Someone canceled the task. Do not start it again if the user does not tell you to. |
 | `package_unavailable` | 13 | `data.package` gives the engine package. It is not available at this time. Use a different engine. |
 | `near_silent` | 5 | The audio of the line is almost silent, so Vois Studio did not keep it. Make the line longer, or select a different voice. |
+| `take_superseded`, `take_not_recorded` | 5 | The line does not have the new take. Generate the line again. If the error text has a storage code (below), correct the disk first. |
+| `voice_not_found` | 4 | 2.6.3+. The voice ID does not identify a voice. This occurs on all engines, and in `speaker create` and `speaker update`. Use `voice list --source all --format json`, then use a correct ID. Do not try the same ID again. |
 | `incompatible_voice` | 1 | The engine cannot speak this voice, for example a Sonic voice with `--engine fast`. Select a voice that has the engine in `supported_engines`. |
 | `plan_unconfirmed` | 7 | Vois Studio cannot examine the paid plan online. Tell the user to connect to the internet. Then try again. |
 
@@ -26,7 +28,7 @@ If there is no `data.reason` in this list, the `code` sets the exit code.
 
 | `code` | Exit code | Meaning |
 |---|---|---|
-| -32002 | 4 | Not found. `data.resource` gives the item. |
+| -32002 | 4 | Not found. `data.resource` gives the item. In 2.6.3 and after, a project or script ID that is not in the database in `project get`, `project update` or `script get` also gives this code. |
 | -32003 | 5 | The generation fails. |
 | -32004 | 6 | The export fails. |
 | -32005 | 7 | A license is necessary. `data.feature` gives the function, for example `cli`, `cli_subscription` or `voice_design`. |
@@ -36,6 +38,10 @@ If there is no `data.reason` in this list, the `code` sets the exit code.
 | -32009 | 7 | A `speak` session tried to get a file. `speak` only plays the voice. |
 | -32602 | 1 | A parameter is not correct, for example a library voice with `--engine sonic`. Read the message. |
 | Other | 1 | General error. Read the message. |
+
+## Storage codes
+
+If the disk does not accept a write during a generation, the error message has a storage code before the cause. The code is `storage_failure(<type>)`, or `storage_failure(<type>,<SQLite code>)` for a database write. The type is `storage_full`, `permission_denied`, `read_only` or `io_error`. An example is `TTS generation failed: storage_failure(storage_full): take_not_recorded: ...`. The storage code does not change the exit code. Tell the user to make free space on the disk or to correct the permissions. Then try again.
 
 ## Timeouts
 

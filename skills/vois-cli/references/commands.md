@@ -1,7 +1,7 @@
 # vois-cli commands
 
 This file gives the flags of the commands that the vois-cli skill uses.
-The flags come from `vois-cli <group> <command> --help` of Vois Studio 2.6.2.
+The flags come from `vois-cli <group> <command> --help` of Vois Studio 2.6.2 and 2.6.3. A flag that is only in 2.6.3 and after shows "2.6.3+".
 If a flag is not in this file, look at `--help` before you use it.
 
 All commands accept `--format human`, `--format json` or `--format quiet` (or `-f`).
@@ -77,6 +77,7 @@ With `--output -`, stdout has only the audio. The result line goes to stderr.
 | `-p`, `--prefix` | text | Default `line`. The files are `<prefix>_0001.wav` and the subsequent numbers. |
 | `--skip-existing` | none | Does not generate a line again if its file is there. |
 | `-I`, `--instruct` | plain words | Omni and Craft only. It applies to all lines. The short flag is a capital `I`. |
+| `--seed` | a number | 2.6.3+. The same seed for all lines. Each item of `results` shows its `seed`. |
 
 `--voice`, `--speed`, `--language`, `--quality`, `--engine`, `--diffusion-steps`, `--guidance-scale` and `--voice-design-instruct` are the same as in `tts generate`.
 
@@ -120,14 +121,16 @@ The JSON result has `total`, `success`, `failed`, `skipped`, `failed_lines`, `in
 | `script update` | `-i`, `--id`, `-t`, `--title`, `-c`, `--content`, `--content-file` |
 | `script delete` | `-i`, `--id`, `--force` |
 | `script reorder` | `-p`, `--project`, `-o`, `--order <ID,ID,...>` |
-| `script generate` | `-i`, `--id`, `-v`, `--voice` (default voice for a line with no speaker), `-s`, `--speed`, `-l`, `--language` |
+| `script generate` | `-i`, `--id`, `-v`, `--voice` (default voice for a line with no speaker), `-s`, `--speed`, `-l`, `--language`, `--engine <id>` (2.6.3+), `-I`, `--instruct` (2.6.3+) |
 | `script segments` | `-i`, `--id` |
 | `speaker create` | `-s`, `--script`, `-n`, `--name`, `-v`, `--voice`, `-c`, `--color <hex>` |
 | `speaker list` | `-s`, `--script` |
 | `speaker update` | `-i`, `--id`, `-v`, `--voice`, `-b`, `--blend <JSON>` |
 | `speaker delete` | `-i`, `--id` |
 
-`script generate` has no `--engine` flag and no `--instruct` flag.
+In 2.6.3 and after, `script generate --engine` sets the engine for this command only. It does not change the selected engine of the app. `VOIS_ENGINE` and `cli.toml` do not apply to `script generate`. `--instruct` gives a direction to each line. Omni and Craft use it. In 2.6.2, `script generate` has no `--engine` flag and no `--instruct` flag.
+
+In 2.6.3 and after, `speaker create` and `speaker update` do not accept a voice ID that does not identify a voice. They stop with exit code 4 and `data.reason: "voice_not_found"`, and the speaker does not change.
 
 ## export
 
@@ -136,8 +139,8 @@ The JSON result has `total`, `success`, `failed`, `skipped`, `failed_lines`, `in
 | `export with-profile` | `-i`, `--input`, `-o`, `--output`, `-p`, `--profile` | Masters the audio to the loudness of the export profile. |
 | `export mp3` | `-i`, `-o`, `-b`, `--bitrate` (64, 128, 192, 256 or 320, default 192) | Makes an MP3 file. |
 | `export audio` | `-i`, `-o`, `--audio-format <format>`, `-b`, `--bit-depth <16, 24 or 32>`, `--sample-rate`, `--normalize`, `--target-lufs` | Makes a file in a different format: `mp3` (default), `wav`, `flac`, `aac` or `m4a`. `--normalize` uses the settings from `mastering set`. |
-| `export compile-script` | `-s`, `--script` | Puts the lines of a script together into one WAV file in the data folder of Vois Studio. |
-| `export compile-project` | `-p`, `--project` | Puts the scripts of a project together into one file. |
+| `export compile-script` | `-s`, `--script`, `-o`, `--output <absolute path>` (2.6.3+) | Puts the lines of a script together into one WAV file in the data folder of Vois Studio. `--output` also writes a copy to the path. The JSON result then has `output`. `-` is not accepted. |
+| `export compile-project` | `-p`, `--project`, `-o`, `--output <absolute path>` (2.6.3+) | Puts the scripts of a project together into one file. `--output` is the same as for `compile-script`. |
 | `export profiles` | none | Shows the export profiles. |
 | `export profile` | `-i`, `--id` | Shows one export profile. |
 
