@@ -58,6 +58,10 @@ Copy a folder from `skills/` into the skills folder of your agent, for example `
 
 An agent does not buy a plan or credits for you. When a plan is necessary, the agent shows you the link, and you make the decision.
 
+## Privacy
+
+The skills operate on your computer and do not send data to a server. See [PRIVACY.md](PRIVACY.md).
+
 ## Problems and ideas
 
 Open an [issue](https://github.com/vois-so/skills/issues). For a problem in Vois Studio, use [vois-so/vois-studio](https://github.com/vois-so/vois-studio/issues).
