@@ -138,7 +138,7 @@ In 2.6.3 and after, `speaker create` and `speaker update` do not accept a voice 
 |---|---|---|
 | `export with-profile` | `-i`, `--input`, `-o`, `--output`, `-p`, `--profile` | Masters the audio to the loudness of the export profile. |
 | `export mp3` | `-i`, `-o`, `-b`, `--bitrate` (64, 128, 192, 256 or 320, default 192) | Makes an MP3 file. |
-| `export audio` | `-i`, `-o`, `--audio-format <format>`, `-b`, `--bit-depth <16, 24 or 32>`, `--sample-rate`, `--normalize`, `--target-lufs` | Makes a file in a different format: `mp3` (default), `wav`, `flac`, `aac` or `m4a`. `--normalize` uses the settings from `mastering set`. |
+| `export audio` | `-i`, `-o`, `--audio-format <format>`, `-b`, `--bit-depth <16, 24 or 32>`, `--sample-rate`, `--normalize`, `--target-lufs` | Makes a file in a different format: `mp3` (default), `wav`, `flac`, `aac` or `m4a`. `--normalize` uses the values from `mastering set`. |
 | `export compile-script` | `-s`, `--script`, `-o`, `--output <absolute path>` (2.6.3+) | Puts the lines of a script together into one WAV file in the data folder of Vois Studio. `--output` also writes a copy to the path. The JSON result then has `output`. `-` is not accepted. |
 | `export compile-project` | `-p`, `--project`, `-o`, `--output <absolute path>` (2.6.3+) | Puts the scripts of a project together into one file. `--output` is the same as for `compile-script`. |
 | `export profiles` | none | Shows the export profiles. |

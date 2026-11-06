@@ -17,7 +17,7 @@ Vois Studio must be open on the same computer, with the same user account.
 ## Hard rules
 
 1. Use `status --format json` before each new task. Do the step that `next_action` gives.
-2. Use vois-cli on the computer that has Vois Studio open, as the same operating system user. A cloud agent cannot connect to it.
+2. Use vois-cli on the computer that has Vois Studio open, as the same user account of the computer. A cloud agent cannot connect to it.
 3. Use an absolute path for each input file and each output file. Vois Studio opens the files in its own process.
 4. Add `--format json` when you must read the result. The result goes to stdout. An error object goes to stderr.
 5. Use only the voice IDs that `voice list` gives. Do not make an ID from a voice name.
@@ -217,7 +217,7 @@ vois-cli export with-profile --input "/Users/me/audio/episode.wav" \
 
 | `--profile` | Format | Loudness | Use the suffix |
 |---|---|---|---|
-| `acx_audiobook` | MP3 | -20 LUFS | `.mp3` |
+| `acx_audiobook` | MP3 | -20 LUFS (-17 LUFS in 2.6.3 and after) | `.mp3` |
 | `apple_podcasts` | AAC | -16 LUFS | `.m4a` |
 | `spotify_podcasts` | MP3 | -16 LUFS | `.mp3` |
 | `youtube_video` | AAC | -14 LUFS | `.m4a` |
