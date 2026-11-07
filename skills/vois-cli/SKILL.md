@@ -184,7 +184,7 @@ vois-cli tts batch-file --input "/Users/me/audio/lines.txt" --output-dir "/Users
 - Vois Studio makes the output folder if there is no folder.
 - For Omni and Craft, `--instruct` (or `-I`) applies to all lines.
 - If one or more lines fail, the exit code is 5. `failed_lines` gives the line numbers. Correct those lines. Then do the same command again. `--skip-existing` keeps the files that are complete.
-- In Vois Studio 2.6.3 and after, `--seed <number>` gives the same seed to all lines. A result with `"status": "success"` shows its `seed`, but not on Sonic. A result with `"status": "failed"` or `"status": "interrupted"` does not show a `seed`.
+- In Vois Studio 2.6.3 and after, `--seed <number>` sends the same seed with each line. Sonic does not use the seed. A result with `"status": "success"` shows its `seed`, but not on Sonic. A result with `"status": "failed"` or `"status": "interrupted"` does not show a `seed`.
 
 ## Step 8: Make a script with speakers
 

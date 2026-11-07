@@ -77,7 +77,7 @@ With `--output -`, stdout has only the audio. The result line goes to stderr.
 | `-p`, `--prefix` | text | Default `line`. The files are `<prefix>_0001.wav` and the subsequent numbers. |
 | `--skip-existing` | none | Does not generate a line again if its file is there. |
 | `-I`, `--instruct` | plain words | Omni and Craft only. It applies to all lines. The short flag is a capital `I`. |
-| `--seed` | a number | 2.6.3+. The same seed for all lines. An item of `results` with `"status": "success"` shows its `seed`, but not on Sonic. A `failed` or `interrupted` item does not show a `seed`. |
+| `--seed` | a number | 2.6.3+. Sends the same seed with each line. Sonic does not use it. An item of `results` with `"status": "success"` shows its `seed`, but not on Sonic. A `failed` or `interrupted` item does not show a `seed`. |
 
 `--voice`, `--speed`, `--language`, `--quality`, `--engine`, `--diffusion-steps`, `--guidance-scale` and `--voice-design-instruct` are the same as in `tts generate`.
 
