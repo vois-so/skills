@@ -5,7 +5,7 @@ license: MIT
 compatibility: Vois Studio 2.6.2+ on an Apple Silicon Mac or Windows, vois-cli (Vois Studio installs it), and optionally ffprobe or Node.js 18+ to examine the output files.
 metadata:
   author: vois-so
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Vois CLI
@@ -17,7 +17,7 @@ Vois Studio must be open on the same computer, with the same user account.
 ## Hard rules
 
 1. Use `status --format json` before each new task. Do the step that `next_action` gives.
-2. Use vois-cli on the computer that has Vois Studio open, as the same operating system user. A cloud agent cannot connect to it.
+2. Use vois-cli on the computer that has Vois Studio open, as the same user account of the computer. A cloud agent cannot connect to it.
 3. Use an absolute path for each input file and each output file. Vois Studio opens the files in its own process.
 4. Add `--format json` when you must read the result. The result goes to stdout. An error object goes to stderr.
 5. Use only the voice IDs that `voice list` gives. Do not make an ID from a voice name.
@@ -61,7 +61,7 @@ This command starts Vois Studio with no window.
 | Field | What it shows |
 |---|---|
 | `status` | `running` when Vois Studio answers. |
-| `version` | The version of Vois Studio. This skill agrees with 2.6.2. |
+| `version` | The version of Vois Studio. This skill agrees with 2.6.2 and 2.6.3. Some flags and exit codes are only in 2.6.3 and after. The text tells you which. |
 | `cli_access_enabled` | `true` when this plan can use the CLI. |
 | `access_mode` | `subscription` for a paid plan. `payg` for Free with export credits. |
 | `plan_code`, `entitlement_tier` | The plan. Use these values, not your memory of the plans. |
@@ -134,6 +134,7 @@ Read these JSON fields: `id`, `name`, `source`, `gender`, `description`, `catego
 Some library voices also have `available_languages` and `tags`.
 
 - The engine must be in `supported_engines` of the voice. If it is not, the task stops with exit code 1 and `data.reason: "incompatible_voice"`.
+- In Vois Studio 2.6.3 and after, a voice ID that does not identify a voice stops with exit code 4 and `data.reason: "voice_not_found"`. This occurs on all engines, and in `speaker create` and `speaker update`. Use `voice list --source all --format json`, then use a correct ID. Do not try the same ID again.
 - Sonic speaks only its built-in voices. Male: `sonic_cedar` (default), `sonic_harbor`, `sonic_slate`, `sonic_ridge`, `sonic_ember`. Female: `sonic_coral`, `sonic_juniper`, `sonic_meadow`, `sonic_sage`, `sonic_willow`.
 - If a voice has `needs_recreate: true`, it cannot generate. The user must make it again in Vois Studio.
 - Use a cloned voice only when the user tells you to use it. Its `consent_confirmed` must be `true`.
@@ -183,6 +184,7 @@ vois-cli tts batch-file --input "/Users/me/audio/lines.txt" --output-dir "/Users
 - Vois Studio makes the output folder if there is no folder.
 - For Omni and Craft, `--instruct` (or `-I`) applies to all lines.
 - If one or more lines fail, the exit code is 5. `failed_lines` gives the line numbers. Correct those lines. Then do the same command again. `--skip-existing` keeps the files that are complete.
+- In Vois Studio 2.6.3 and after, `--seed <number>` gives the same seed to all lines. Each result shows its `seed`.
 
 ## Step 8: Make a script with speakers
 
@@ -197,11 +199,12 @@ vois-cli script generate --id 246 --language English --format json
 vois-cli export compile-script --script 246 --format json
 ```
 
-- Each line of the script file starts with `[Speaker Name]:`. The speaker name must be the same as the `--name` of a speaker.
+- Each line of the script file starts with `[Speaker Name]:`. The speaker name must be the same as the `--name` of a speaker, with the same capital letters.
+- Make the script with its text first. Then add the speakers. In Vois Studio 2.6.3 and after, `speaker create` adds a speaker only if the script text has the speaker tag of that speaker. If not, the command stops with exit code 1 and `data.reason: "speaker_not_in_script"`.
 - `[pause=800]` on its own line adds 800 ms of silence.
-- `script generate` uses the engine that the user selected in Vois Studio. It has no `--engine` flag. Read `engine_used` in the result.
+- `script generate` uses the engine that the user selected in Vois Studio. Read `engine_used` in the result. In Vois Studio 2.6.3 and after, `--engine <id>` sets the engine for this command only. `--instruct` (or `-I`) gives a direction to each line for Omni and Craft. `--engine` does not change the selected engine of the app. Before the audio starts, Vois Studio examines the language of each line.
 - `model switch --engine <id>` changes the selected engine of the app. Get approval first.
-- `export compile-script` writes `audio/script_<id>.wav` in the data folder of Vois Studio. The human output shows the full path. Then use `export with-profile` to make the file for the user.
+- `export compile-script` writes `audio/script_<id>.wav` in the data folder of Vois Studio. The human output shows the full path. In Vois Studio 2.6.3 and after, `--output <absolute path>` also writes a copy to that path, and the JSON result has `output`. Then use `export with-profile` to make the file for the user.
 - On Free with export credits, `export compile-script` does not operate. Use `tts generate` for each line.
 
 The script format, the speaker rules and the clean-up steps are in [scripts](references/scripts.md).
@@ -215,7 +218,7 @@ vois-cli export with-profile --input "/Users/me/audio/episode.wav" \
 
 | `--profile` | Format | Loudness | Use the suffix |
 |---|---|---|---|
-| `acx_audiobook` | MP3 | -20 LUFS | `.mp3` |
+| `acx_audiobook` | MP3 | -20 LUFS (-17 LUFS in 2.6.3 and after) | `.mp3` |
 | `apple_podcasts` | AAC | -16 LUFS | `.m4a` |
 | `spotify_podcasts` | MP3 | -16 LUFS | `.mp3` |
 | `youtube_video` | AAC | -14 LUFS | `.m4a` |
@@ -292,7 +295,7 @@ You must give `--follow` and `--play`. For a Sonic file, use `tts generate --eng
 
 ## More information
 
-- [commands](references/commands.md): the flags of each command that this skill uses, from `--help` of version 2.6.2.
+- [commands](references/commands.md): the flags of each command that this skill uses, from `--help` of versions 2.6.2 and 2.6.3.
 - [engines](references/engines.md): languages, tags, direction, and the rules for engines and voices.
 - [scripts](references/scripts.md): script format, speakers, pauses and clean-up.
 - [errors](references/errors.md): `data.reason` values, export credit recovery and timeouts.
