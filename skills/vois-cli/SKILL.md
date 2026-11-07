@@ -199,7 +199,8 @@ vois-cli script generate --id 246 --language English --format json
 vois-cli export compile-script --script 246 --format json
 ```
 
-- Each line of the script file starts with `[Speaker Name]:`. The speaker name must be the same as the `--name` of a speaker.
+- Each line of the script file starts with `[Speaker Name]:`. The speaker name must be the same as the `--name` of a speaker, with the same capital letters.
+- Make the script with its text first. Then add the speakers. In Vois Studio 2.6.3 and after, `speaker create` adds a speaker only if the script text has the speaker tag of that speaker. If not, the command stops with exit code 1 and `data.reason: "speaker_not_in_script"`.
 - `[pause=800]` on its own line adds 800 ms of silence.
 - `script generate` uses the engine that the user selected in Vois Studio. Read `engine_used` in the result. In Vois Studio 2.6.3 and after, `--engine <id>` sets the engine for this command only. `--instruct` (or `-I`) gives a direction to each line for Omni and Craft. `--engine` does not change the selected engine of the app. Before the audio starts, Vois Studio examines the language of each line.
 - `model switch --engine <id>` changes the selected engine of the app. Get approval first.

@@ -21,6 +21,7 @@ Read `data.reason` first. It sets the exit code before `code` does.
 | `voice_not_found` | 4 | 2.6.3+. The voice ID does not identify a voice. This occurs on all engines, and in `speaker create` and `speaker update`. Use `voice list --source all --format json`, then use a correct ID. Do not try the same ID again. |
 | `incompatible_voice` | 1 | The engine cannot speak this voice, for example a Sonic voice with `--engine fast`. Select a voice that has the engine in `supported_engines`. |
 | `package_not_installed` | 1 | 2.6.3+. The engine (or a Fast language) is not downloaded on this computer, for example `--engine omni` without Omni. Get approval, then use `model download --model <engine>`. Then try again. |
+| `speaker_not_in_script` | 1 | 2.6.3+. `speaker create` stops and does not add the speaker, because the script text does not have the speaker tag of that speaker. First, write the speaker tag in the script with `script update`, for example `[Host]: Hello.`. Then do the command again. The names must be the same, with the same capital letters. |
 | `plan_unconfirmed` | 7 | Vois Studio cannot examine the paid plan online. Tell the user to connect to the internet. Then try again. |
 
 ## JSON-RPC codes
