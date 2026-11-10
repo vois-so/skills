@@ -124,7 +124,7 @@ The script does these steps with `vois-cli`:
 
 1. It finds the project with the show name, or makes it (`project create`).
 2. It makes the script (`script create --content-file`). When you use it again, it updates the script (`script update`).
-3. It makes one speaker for each host that has a speaker tag in the script text, with its voice (`speaker create --script --name --voice`). It does this after step 2, because Vois Studio 2.6.3 and after does not add a speaker if the script text does not have its speaker tag.
+3. It makes one speaker for each host that has a speaker tag in the script text, with its voice (`speaker create --script --name --voice`). It does this after step 2. Vois Studio 2.6.3 and after does not add a speaker if the script text does not have its speaker tag.
 4. It generates all lines (`script generate --id --language`). The result shows `engine_used`.
 5. It puts the lines together in one WAV (`export compile-script --script`). The WAV is 48 kHz stereo.
 6. If `intro_music` or `outro_music` has a file, it adds the music before and after the voices with ffmpeg. Use only music that the user has the rights to.
