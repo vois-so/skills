@@ -17,7 +17,13 @@ Read `data.reason` first. It sets the exit code before `code` does.
 | `cancelled` | 130 | Someone canceled the task. Do not start it again if the user does not tell you to. |
 | `package_unavailable` | 13 | `data.package` gives the engine package. It is not available at this time. Use a different engine. |
 | `near_silent` | 5 | The audio of the line is almost silent, so Vois Studio did not keep it. Make the line longer, or select a different voice. |
-| `incompatible_voice` | 1 | The engine cannot speak this voice, for example a Sonic voice with `--engine fast`. Select a voice that has the engine in `supported_engines`. |
+| `take_superseded`, `take_not_recorded` | 5 | The line does not have the new take. Generate the line again. If the error text has a storage code (below), correct the disk first. |
+| `voice_not_found` | 4 | 2.6.3+. The voice ID does not identify a voice. This occurs on all engines, and in `speaker create` and `speaker update`. Use `voice list --source all --format json`, then use a correct ID. Do not try the same ID again. |
+| `incompatible_voice` | 1 | The engine cannot speak this voice, for example a Sonic voice with `--engine fast`. In 2.6.3 and after, a library voice with `--engine sonic` also gives `incompatible_voice`. Select a voice that has the engine in `supported_engines`. |
+| `package_not_installed` | 1 | 2.6.3+. This computer does not have the engine (or a Fast language), for example `--engine omni` without Omni. Get approval, then use `model download --model <engine>`. Then try again. |
+| `speaker_not_in_script` | 1 | 2.6.3+. `speaker create` stops and does not add the speaker, because the script text does not have the speaker tag of that speaker. A speaker tag in a code block does not count. First, write the speaker tag in the script with `script update`, for example `[Host]: Hello.`. Then do the command again. The names must be the same, with the same capital letters. |
+| `script_text_unclassified` | 1 | 2.6.3+. `speaker create` stops and does not add the speaker, because Vois Studio cannot read the speaker tags in the script text. Do not write the script text again with `script update`, because this can delete parts of the script. Tell the user to open the script in Vois Studio and add the speaker there. |
+| `code_block_needs_editor` | 1 | 2.6.3+. `script update` stops and does not write the text, because the text adds a code block (text between two lines of three backticks) to a script with recorded lines. A recorded line has audio, a take or a clip on the timeline, or a lock. A code block with the same lines and line number as a code block of the script (in the `script get` text) is not new. Thus, a line that you add or remove above a code block also gives this error. Do not send the text again. Tell the user to make the change in the script editor of Vois Studio. |
 | `plan_unconfirmed` | 7 | Vois Studio cannot examine the paid plan online. Tell the user to connect to the internet. Then try again. |
 
 ## JSON-RPC codes
@@ -26,16 +32,29 @@ If there is no `data.reason` in this list, the `code` sets the exit code.
 
 | `code` | Exit code | Meaning |
 |---|---|---|
-| -32002 | 4 | Not found. `data.resource` gives the item. |
+| -32002 | 4 | Not found. `data.resource` gives the item. In 2.6.3 and after, a project or script ID that is not in the database in `project get`, `project update` or `script get` also gives this code. |
 | -32003 | 5 | The generation fails. |
-| -32004 | 6 | The export fails. |
+| -32004 | 6 | The export fails. In 2.6.3 and after, a command that writes audio to a file can stop with this code after the user restores a backup. The message tells you to validate the license again. Tell the user to open Vois Studio, or to use `license status` while the computer is online. Then do the command again. `tts batch-file` stops with exit code 5 in this condition. |
 | -32005 | 7 | A license is necessary. `data.feature` gives the function, for example `cli`, `cli_subscription` or `voice_design`. |
 | -32006 | 8 | The quota is full. |
 | -32007 | 10 | The Sonic queue is full. |
 | -32008 | 11 | Not sufficient memory. |
 | -32009 | 7 | A `speak` session tried to get a file. `speak` only plays the voice. |
-| -32602 | 1 | A parameter is not correct, for example a library voice with `--engine sonic`. Read the message. |
+| -32602 | 1 | A parameter is not correct. Read the message. In 2.6.3 and after, an output path in a data folder of Vois Studio also gives this code. Refer to "Output paths" below. |
 | Other | 1 | General error. Read the message. |
+
+## Output paths
+
+In Vois Studio 2.6.3 and after, vois-cli does not write a file in a data folder of Vois Studio. This applies to `tts generate`, `tts silence`, `tts generate-voice-design`, `tts batch-file`, `export audio`, `export mp3`, `export with-profile`, `export compile-script --output`, `export compile-project --output`, `rss generate` and `pronunciation export`. vois-cli also refuses a link to a data folder.
+
+- The command stops with exit code 1 and the code `-32602`. The message is "'output' is inside a folder of Vois Studio. Choose a path outside the Vois Studio data folders." There is no `data.reason`.
+- `tts batch-file` refuses each line and stops with exit code 5.
+- Vois Studio does not write the file and does not make a folder.
+- Do not try the same path again. Use an absolute path in a folder of the user, for example `/Users/me/audio/`.
+
+## Storage codes
+
+If the disk does not accept a write during a generation, the error message has a storage code before the cause. The code is `storage_failure(<type>)`, or `storage_failure(<type>,<SQLite code>)` for a database write. The type is `storage_full`, `permission_denied`, `read_only` or `io_error`. An example is `TTS generation failed: storage_failure(storage_full): take_not_recorded: ...`. The storage code does not change the exit code. Tell the user to make free space on the disk or to correct the permissions. Then try again.
 
 ## Timeouts
 

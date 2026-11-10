@@ -65,7 +65,7 @@ Vois Studio can export and normalize in one step. It uses its own mastering. The
 vois-cli export audio --input joined.wav --output final.mp3 --audio-format mp3 --normalize --target-lufs -19
 ```
 
-An export profile has its own loudness that does not change: `apple_podcasts` and `spotify_podcasts` -16, `acx_audiobook` -20, `youtube_video` -14, `generic_hq` -19 LUFS.
+An export profile has its own loudness that does not change: `apple_podcasts` and `spotify_podcasts` -16, `acx_audiobook` -17 (-20 before Vois Studio 2.6.3), `youtube_video` -14, `generic_hq` -19 LUFS.
 
 ```bash
 vois-cli export with-profile --input joined.wav --output final.m4a --profile apple_podcasts
