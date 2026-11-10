@@ -18,7 +18,7 @@ Vois Studio must be open on the same computer, with the same user account.
 
 1. Use `status --format json` before each new task. Do the step that `next_action` gives.
 2. Use vois-cli on the computer that has Vois Studio open, as the same user account of the computer. A cloud agent cannot connect to it.
-3. Use an absolute path for each input file and each output file. Vois Studio opens the files in its own process.
+3. Use an absolute path for each input file and each output file. Vois Studio opens the files in its own process. In Vois Studio 2.6.3 and after, an output path in a data folder of Vois Studio stops the command with exit code 1. Write the output to a folder of the user.
 4. Add `--format json` when you must read the result. The result goes to stdout. An error object goes to stderr.
 5. Use only the voice IDs that `voice list` gives. Do not make an ID from a voice name.
 6. Get approval from the user before a command that changes data in Vois Studio. The list is in [Commands that change data](#commands-that-change-data).
@@ -295,7 +295,7 @@ You must give `--follow` and `--play`. For a Sonic file, use `tts generate --eng
 
 ## More information
 
-- [commands](references/commands.md): the flags of each command that this skill uses, from `--help` of versions 2.6.2 and 2.6.3.
+- [commands](references/commands.md): the flags of each command that this skill uses, from `--help` of version 2.6.3.
 - [engines](references/engines.md): languages, tags, direction, and the rules for engines and voices.
 - [scripts](references/scripts.md): script format, speakers, pauses and clean-up.
 - [errors](references/errors.md): `data.reason` values, export credit recovery and timeouts.

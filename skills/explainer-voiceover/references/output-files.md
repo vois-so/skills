@@ -86,6 +86,6 @@ The times use `hours:minutes:seconds.milliseconds`. To get a frame number, multi
 | `apple_podcasts` | -16 LUFS | AAC, 48 kHz, stereo |
 | `spotify_podcasts` | -16 LUFS | MP3, 44.1 kHz, stereo |
 | `generic_hq` | -19 LUFS | WAV, 48 kHz, stereo |
-| `acx_audiobook` | -20 LUFS | MP3, 44.1 kHz, stereo |
+| `acx_audiobook` | -17 LUFS (-20 LUFS before Vois Studio 2.6.3) | MP3, 44.1 kHz, stereo |
 
 Get the current list with `vois-cli export profiles --format json`. An export must be 5 seconds or longer. A shorter one stops with exit 64.

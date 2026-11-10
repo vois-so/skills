@@ -1,7 +1,7 @@
 # vois-cli commands
 
 This file gives the flags of the commands that the vois-cli skill uses.
-The flags come from `vois-cli <group> <command> --help` of Vois Studio 2.6.2 and 2.6.3. A flag that is only in 2.6.3 and after shows "2.6.3+".
+The flags come from `vois-cli <group> <command> --help` of Vois Studio 2.6.3. A flag that is only in 2.6.3 and after shows "2.6.3+".
 If a flag is not in this file, look at `--help` before you use it.
 
 All commands accept `--format human`, `--format json` or `--format quiet` (or `-f`).
@@ -39,7 +39,7 @@ No other flags. The fields are in the skill, Step 2.
 | Command | Flags | What it does |
 |---|---|---|
 | `license status` | none | Shows the license and the access. |
-| `license activate` | `[KEY]`, `--force` | The user types the key, or gives it on stdin. `--force` removes the key from a different device. |
+| `license activate` | `[KEY]`, `--force` | The user types the key, or gives it on stdin. `--force` removes the key from a different device. In 2.6.3 and after, when the key is active on its maximum number of devices, the error tells you to use `--force`. The exit code does not change. Get approval before you use `--force`. |
 | `license deactivate` | `--yes` (`-y`) | Removes the license from this computer. With `--format json`, `--yes` is necessary. |
 | `credits sync` | none | Gets the export credit balance from the server. |
 | `credits reconcile` | `--charge <ID>` | Use it only when `support@vois.so` tells the user to use it. |
@@ -123,7 +123,7 @@ The JSON result has `total`, `success`, `failed`, `skipped`, `failed_lines`, `in
 | `script reorder` | `-p`, `--project`, `-o`, `--order <ID,ID,...>` |
 | `script generate` | `-i`, `--id`, `-v`, `--voice` (default voice for a line with no speaker), `-s`, `--speed`, `-l`, `--language`, `--engine <id>` (2.6.3+), `-I`, `--instruct` (2.6.3+) |
 | `script segments` | `-i`, `--id` |
-| `speaker create` | `-s`, `--script`, `-n`, `--name`, `-v`, `--voice`, `-c`, `--color <hex>` |
+| `speaker create` | `-s`, `--script`, `-n`, `--name`, `-v`, `--voice` (default `alba`), `-c`, `--color <hex>` (default `#6366f1`) |
 | `speaker list` | `-s`, `--script` |
 | `speaker update` | `-i`, `--id`, `-v`, `--voice`, `-b`, `--blend <JSON>` |
 | `speaker delete` | `-i`, `--id` |
@@ -132,19 +132,23 @@ In 2.6.3 and after, `script generate --engine` sets the engine for this command 
 
 In 2.6.3 and after, `speaker create` and `speaker update` do not accept a voice ID that does not identify a voice. They stop with exit code 4 and `data.reason: "voice_not_found"`, and the speaker does not change.
 
+In 2.6.3 and after, `speaker create` adds a speaker only if the script text has the speaker tag of that speaker, not in a code block. If not, it stops with exit code 1 and `data.reason: "speaker_not_in_script"`. `script update` stops with exit code 1 and `data.reason: "code_block_needs_editor"` when the new text adds a code block to a script with recorded lines. Refer to [errors](errors.md).
+
 ## export
 
 | Command | Flags | What it does |
 |---|---|---|
 | `export with-profile` | `-i`, `--input`, `-o`, `--output`, `-p`, `--profile` | Masters the audio to the loudness of the export profile. |
 | `export mp3` | `-i`, `-o`, `-b`, `--bitrate` (64, 128, 192, 256 or 320, default 192) | Makes an MP3 file. |
-| `export audio` | `-i`, `-o`, `--audio-format <format>`, `-b`, `--bit-depth <16, 24 or 32>`, `--sample-rate`, `--normalize`, `--target-lufs` | Makes a file in a different format: `mp3` (default), `wav`, `flac`, `aac` or `m4a`. `--normalize` uses the values from `mastering set`. |
-| `export compile-script` | `-s`, `--script`, `-o`, `--output <absolute path>` (2.6.3+) | Puts the lines of a script together into one WAV file in the data folder of Vois Studio. `--output` also writes a copy to the path. The JSON result then has `output`. `-` is not accepted. |
+| `export audio` | `-i`, `-o`, `--audio-format <format>`, `-b`, `--bitrate` (MP3 and AAC: 64, 128, 192, 256 or 320), `--bit-depth <16, 24 or 32>` (WAV and FLAC, default 16), `--sample-rate`, `--normalize`, `--target-lufs` | Makes a file in a different format: `mp3` (default), `wav`, `flac`, `aac` or `m4a`. `--normalize` uses the values from `mastering set`. |
+| `export compile-script` | `-s`, `--script`, `-o`, `--output <absolute path>` (2.6.3+) | Puts the lines of a script together into one WAV file in the data folder of Vois Studio. `--output` also writes a copy to the path. The JSON result then has `output`. The CLI does not accept `-`. |
 | `export compile-project` | `-p`, `--project`, `-o`, `--output <absolute path>` (2.6.3+) | Puts the scripts of a project together into one file. `--output` is the same as for `compile-script`. |
 | `export profiles` | none | Shows the export profiles. |
 | `export profile` | `-i`, `--id` | Shows one export profile. |
 
 The input of an export must be a WAV file with 5 seconds of audio or more.
+
+In 2.6.3 and after, the output path of `export with-profile`, `export mp3`, `export audio` and `--output` of `compile-script` and `compile-project` cannot be in a data folder of Vois Studio. The same rule applies to `tts generate`, `tts silence`, `tts generate-voice-design` and `tts batch-file`. Refer to "Output paths" in [errors](errors.md).
 
 ## model
 
