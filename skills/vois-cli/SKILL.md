@@ -134,7 +134,7 @@ Read these JSON fields: `id`, `name`, `source`, `gender`, `description`, `catego
 Some library voices also have `available_languages` and `tags`.
 
 - The engine must be in `supported_engines` of the voice. If it is not, the task stops with exit code 1 and `data.reason: "incompatible_voice"`.
-- In Vois Studio 2.6.3 and after, a voice ID that does not identify a voice stops with exit code 4 and `data.reason: "voice_not_found"`. This occurs on all engines, and in `speaker create` and `speaker update`. Use `voice list --source all --format json`, then use a correct ID. Do not try the same ID again.
+- In Vois Studio 2.6.3 and after, a voice ID that does not identify a voice stops with exit code 4 and `data.reason: "voice_not_found"`. This occurs in `tts generate`, `script generate`, `speaker create` and `speaker update`. On Sonic, the ID of a library, catalog or cloned voice, or of a voice from Voice Design, stops with exit code 1 and `data.reason: "incompatible_voice"`. This also occurs when Vois Studio does not have that voice. Use `voice list --source all --format json`, then use a correct ID. Do not try the same ID again.
 - Sonic speaks only its built-in voices. Male: `sonic_cedar` (default), `sonic_harbor`, `sonic_slate`, `sonic_ridge`, `sonic_ember`. Female: `sonic_coral`, `sonic_juniper`, `sonic_meadow`, `sonic_sage`, `sonic_willow`.
 - If a voice has `needs_recreate: true`, it cannot generate. The user must make it again in Vois Studio.
 - Use a cloned voice only when the user tells you to use it. Its `consent_confirmed` must be `true`.
