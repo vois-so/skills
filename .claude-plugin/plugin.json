@@ -1,7 +1,7 @@
 {
   "name": "vois-skills",
   "displayName": "Vois Studio skills",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Skills that tell an AI agent how to do one audio task with Vois Studio: voiceovers for Remotion and HyperFrames videos, audiobook chapters, podcast episodes, short videos, ads, dubbing and more.",
   "author": {
     "name": "Vois Studio",

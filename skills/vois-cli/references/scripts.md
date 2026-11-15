@@ -35,7 +35,7 @@ These commands change data in Vois Studio. Get approval from the user first.
      --content-file "/Users/me/ep1.txt" --format json
    ```
 
-3. Add one speaker for each name in the brackets. The `--name` must be the same as the name in the brackets.
+3. Add one speaker for each name in the brackets. The `--name` must be the same as the name in the brackets, with the same capital letters. Do this step after step 2. In Vois Studio 2.6.3 and after, `speaker create` adds a speaker only if the script text has the speaker tag of that speaker. If not, the command stops with exit code 1 and `data.reason: "speaker_not_in_script"`.
 
    ```bash
    vois-cli speaker create --script <script-id> --name Host --voice podcasts_ai_voices/maya_brooks --format json

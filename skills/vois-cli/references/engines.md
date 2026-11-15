@@ -114,7 +114,7 @@ The ten Sonic voices:
 | `sonic_ridge` | `sonic_sage` |
 | `sonic_ember` | `sonic_willow` |
 
-## Speed and settings for Omni
+## Speed and adjustments for Omni
 
 | Flag | Range | Default |
 |---|---|---|

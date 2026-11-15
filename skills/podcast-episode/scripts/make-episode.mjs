@@ -74,10 +74,13 @@ if (exists) {
 }
 const sid = String(receipt.script_id);
 
-// 5. One speaker for each host, with its voice.
+// 5. One speaker for each host that the script text names, with its voice.
+// The script text is saved first: Vois Studio 2.6.3 and after refuses a
+// speaker that the text does not name (data.reason "speaker_not_in_script").
 const current = voisOk(["speaker", "list", "--script", sid], "speaker list").json || [];
 receipt.speakers = {};
 for (const [name, voice] of Object.entries(cfg.hosts)) {
+  if (!parsed.speakers.has(name)) continue;
   const sp = current.find((x) => x.name === name);
   if (!sp) receipt.speakers[name] = voisOk(["speaker", "create", "--script", sid, "--name", name, "--voice", voice], `speaker create ${name}`).json.id;
   else {

@@ -5,7 +5,7 @@ license: MIT
 compatibility: Vois Studio on an Apple Silicon Mac or Windows, vois-cli, Node.js 18+, and optionally ffmpeg and a local transcript tool (whisper or whisper.cpp).
 metadata:
   author: vois-so
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Audio QA

@@ -7,7 +7,7 @@
       "name": "vois-skills",
       "source": "./",
       "description": "Skills for audio tasks with Vois Studio: voiceovers, audiobooks, podcasts, short videos, ads and dubbing.",
-      "version": "0.1.0"
+      "version": "0.2.0"
     },
     {
       "name": "agent-voice",
