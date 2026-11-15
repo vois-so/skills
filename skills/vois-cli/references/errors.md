@@ -54,7 +54,7 @@ In Vois Studio 2.6.3 and after, vois-cli does not write a file in a data folder 
 
 ## Storage codes
 
-If the disk does not accept a write during a generation, the error message has a storage code before the cause. The code is `storage_failure(<type>)`, or `storage_failure(<type>,<SQLite code>)` for a database write. The type is `storage_full`, `permission_denied`, `read_only` or `io_error`. An example is `TTS generation failed: storage_failure(storage_full): take_not_recorded: ...`. The storage code does not change the exit code. Tell the user to make free space on the disk or to correct the permissions. Then try again.
+In 2.6.3 and after, if the disk does not accept a write during a generation, the error message has a storage code before the cause. The code is `storage_failure(<type>)`, or `storage_failure(<type>,<SQLite code>)` for a database write. The type is `storage_full`, `permission_denied`, `read_only` or `io_error`. An example is `TTS generation failed: storage_failure(storage_full): take_not_recorded: ...`. The storage code does not change the exit code. Tell the user to make free space on the disk or to correct the permissions. Then try again.
 
 ## Timeouts
 
